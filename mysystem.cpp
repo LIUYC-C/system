@@ -1,7 +1,8 @@
 #include<iostream>
 #include<algorithm>
 #include<math.h>
-#include<bits/stdc++.h>
+#include<unordered_map>
+#include<queue>
 using namespace std;
 
 const int N=101010,MAX_DEPT=1001,MAX_PRO=1001;
@@ -88,10 +89,15 @@ void input_score(){
     cout<<"请输入该院系名次："<<endl;
     int r;
     cin>>r;
+    while(r<1||r>3){
+        cout<<"名次为一到三名 请重新输入"<<endl;
+        cin>>r;
+    }
 
     p=p+t;
     int id_p=pro_idx[p];
     int id_d=depart_idx[d];
+
     
     pro_rank3[id_p][r]=d;
     
@@ -205,7 +211,7 @@ void query_all_depts(){
 
 //按总分排序输出各院系
 bool cmp(depart a,depart b){
-    return grade_sum[a.name]<grade_sum[b.name];
+    return grade_sum[a.name]>grade_sum[b.name];
 }
 void sort_puts(){
     sort(dep_list+1,dep_list+1+idx1,cmp);
@@ -251,6 +257,9 @@ void add_pro(){
     cout<<"请输入项目类型"<<endl;
     string type;cin>>type;
     d.type=type;
+    cout<<"请输入项目分数"<<endl;
+    double score;cin>>score;
+    d.score=score;
 
     pro_list[++idx2]=d;
 
@@ -265,7 +274,7 @@ void add_pro(){
 
 void del_pro(){
     if(pro_count==0){
-        cout<<"当前无院系"<<endl;
+        cout<<"当前无项目"<<endl;
         return;
     }
     cout<<"请输入项目名称"<<endl;
@@ -377,7 +386,12 @@ void appeal(){
 }
 
 
-
+void query_pro(){
+    cout<<"--------项目列表-----------"<<endl;
+    for(int i=1;i<=idx2;i++){
+        cout<<"编号："<<pro_list[i].code<<" "<<"名称："<<pro_list[i].name<<" "<<"类型："<<pro_list[i].type<<" "<<"分数："<<pro_list[i].score<<endl;
+    }
+}
 
 
 //普通用户：
@@ -430,7 +444,7 @@ void user_review(){
     propose.push(id_p);
 }
 
-void revie_check(){
+void review_check(){
     cout<<"请输入您想复核的项目名称" <<endl;
     string name;cin>>name;
     cout<<"请输入您想复核的项目类型"<<endl;
@@ -473,6 +487,7 @@ int main(){
                 cout<<"复核处理输入10"<<endl;
                 cout<<"按系院编号查询成绩输入11"<<endl;
                 cout<<"按项目编号查询前三名输入12"<<endl;
+                cout<<"输出已存入项目输入13"<<endl;
                 cout<<"退出系统输入0"<<endl;
                 int op;cin>>op;
                 if(op==1)add_pro();
@@ -487,6 +502,7 @@ int main(){
                 else if(op==10)appeal();
                 else if(op==11)ask_grade();
                 else if(op==12)ask_pro();
+                else if(op==13)query_pro();
                 else if(op==0){
                     return 0;
                 }
@@ -509,7 +525,7 @@ int main(){
                 if(op==1)user_ask_dept_rank();
                 else if(op==2)query_all_depts();
                 else if(op==3)user_review();
-                else if(op==4)revie_check();
+                else if(op==4)review_check();
                 else{
                     return 0;
                 }    
